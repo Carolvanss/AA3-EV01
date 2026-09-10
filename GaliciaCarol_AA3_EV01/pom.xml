@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-    GA7-220501096-AA3-EV01 - Codificacion de modulos del software (Spring Boot + Hibernate)
-    Proyecto: PequeGestion
-    Autora: Carol Vanessa Galicia - Ficha 3235899
+  - Codificacion de modulos del software (Spring Boot + Hibernate)
+
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
