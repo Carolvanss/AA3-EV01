@@ -2,10 +2,11 @@ package com.pequegestion.api.modelo;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 
 /**
  * Entidad Nino: representa la tabla "ninos" en la base de datos "pequegestion".
- * Es la entidad principal de este modulo: cada niño pertenece a un grupo
+ * Es la entidad principal de este modulo: cada nino pertenece a un grupo
  * y tiene asociado un acudiente responsable.
  *
  * Idea clave: el objeto Java Nino se convierte en un registro (fila) de la tabla "ninos".
@@ -19,13 +20,16 @@ public class Nino {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank(message = "El nombre es obligatorio")
     private String nombre;
 
+    @NotBlank(message = "La fecha de nacimiento es obligatoria")
     private String fechaNacimiento; // formato yyyy-MM-dd
 
-    private String nombreAcudiente; // referencia simple al acudiente responsable del niño
+    @NotBlank(message = "El nombre del acudiente es obligatorio")
+    private String nombreAcudiente; // referencia simple al acudiente responsable del nino
 
-    // Relacion muchos-a-uno: varios niños pertenecen al mismo grupo.
+    // Relacion muchos-a-uno: varios ninos pertenecen al mismo grupo.
     @ManyToOne
     @JoinColumn(name = "grupo_id")
     @JsonIgnoreProperties("ninos") // evita el ciclo infinito Grupo -> Nino -> Grupo al serializar a JSON

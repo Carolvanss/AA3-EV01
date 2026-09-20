@@ -2,12 +2,13 @@ package com.pequegestion.api.modelo;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import java.util.List;
 
 /**
  * Entidad Grupo: representa la tabla "grupos" en la base de datos "pequegestion".
  * Cada grupo tiene un docente a cargo (muchos grupos -> un docente)
- * y agrupa a varios niños (un grupo -> muchos niños).
+ * y agrupa a varios ninos (un grupo -> muchos ninos).
  */
 @Entity
 @Table(name = "grupos")
@@ -17,16 +18,14 @@ public class Grupo {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank(message = "El nombre del grupo es obligatorio")
     private String nombre; // ej: "Sala Cuna", "Parvulos A"
 
-    // Relacion muchos-a-uno: varios grupos pueden tener el mismo docente.
-    // @JsonIgnoreProperties evita bucles infinitos al convertir a JSON (Docente -> Grupo -> Docente...)
     @ManyToOne
     @JoinColumn(name = "docente_id")
     @JsonIgnoreProperties("grupos")
     private Docente docente;
 
-    // Relacion uno-a-muchos: un grupo contiene varios niños.
     @OneToMany(mappedBy = "grupo")
     @JsonIgnoreProperties("grupo")
     private List<Nino> ninos;
@@ -39,8 +38,6 @@ public class Grupo {
         this.nombre = nombre;
         this.docente = docente;
     }
-
-    // ----- Getters y setters -----
 
     public Long getId() {
         return id;
