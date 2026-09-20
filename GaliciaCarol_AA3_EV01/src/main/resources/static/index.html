@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>PequeGestion - Registro de Ninos</title>
+<style>
+  body { font-family: Arial, sans-serif; margin: 30px; background: #f5f5f5; }
+  h1 { color: #2e7d32; }
+  form { background: white; padding: 20px; border-radius: 8px; max-width: 400px; margin-bottom: 30px; }
+  label { display: block; margin-top: 10px; font-weight: bold; }
+  input { width: 100%; padding: 6px; margin-top: 4px; box-sizing: border-box; }
+  button { margin-top: 15px; padding: 10px 20px; background: #2e7d32; color: white; border: none; border-radius: 4px; cursor: pointer; }
+  table { width: 100%; border-collapse: collapse; background: white; }
+  th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+  th { background: #2e7d32; color: white; }
+  #mensaje { margin-top: 10px; font-weight: bold; }
+  .error { color: #c62828; }
+  .exito { color: #2e7d32; }
+</style>
+</head>
+<body>
+
+<h1>Nuevo Niño</h1>
+<form id="formNino">
+  <label>Nombre:</label>
+  <input type="text" id="nombre">
+
+  <label>Fecha de nacimiento:</label>
+  <input type="text" id="fechaNacimiento" placeholder="yyyy-MM-dd">
+
+  <label>Nombre del acudiente:</label>
+  <input type="text" id="nombreAcudiente">
+
+  <button type="submit">GUARDAR</button>
+  <div id="mensaje"></div>
+</form>
+
+<h1>Niños registrados</h1>
+<table>
+  <thead>
+    <tr><th>ID</th><th>Nombre</th><th>Fecha nacimiento</th><th>Acudiente</th></tr>
+  </thead>
+  <tbody id="tablaNinos"></tbody>
+</table>
+
+<script>
+  const API = "http://localhost:8080/api/ninos";
+
+  async function cargarNinos() {
+    const respuesta = await fetch(API);
+    const ninos = await respuesta.json();
+    const tbody = document.getElementById("tablaNinos");
+    tbody.innerHTML = "";
+    ninos.forEach(n => {
+      tbody.innerHTML += `<tr><td>${n.id}</td><td>${n.nombre}</td><td>${n.fechaNacimiento}</td><td>${n.nombreAcudiente}</td></tr>`;
+    });
+  }
+
+  document.getElementById("formNino").addEventListener("submit", async function(evento) {
+    evento.preventDefault();
+    const nino = {
+      nombre: document.getElementById("nombre").value,
+      fechaNacimiento: document.getElementById("fechaNacimiento").value,
+      nombreAcudiente: document.getElementById("nombreAcudiente").value
+    };
+
+    const respuesta = await fetch(API, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(nino)
+    });
+
+    const mensajeDiv = document.getElementById("mensaje");
+
+    if (respuesta.ok) {
+      mensajeDiv.className = "exito";
+      mensajeDiv.textContent = "Nino guardado correctamente.";
+      document.getElementById("formNino").reset();
+      cargarNinos();
+    } else {
+      const errores = await respuesta.json();
+      mensajeDiv.className = "error";
+      mensajeDiv.textContent = Object.values(errores).join(" | ");
+    }
+  });
+
+  cargarNinos();
+</script>
+</body>
+</html>
