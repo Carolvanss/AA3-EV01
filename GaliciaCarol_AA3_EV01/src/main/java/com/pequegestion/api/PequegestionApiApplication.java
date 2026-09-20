@@ -8,7 +8,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * Al ejecutarla, Spring Boot levanta un servidor Tomcat embebido y expone
  * los controladores REST de Nino, Grupo y Docente sobre esa base de datos.
  *
- * Estandar de codificacion aplicado (definido en GA7-220501096-AA1-EV02):
+ * Estandar de codificacion aplicado (definido en AA1-EV02):
  * - PascalCase para nombres de clases (ej: PequegestionApiApplication).
  * - camelCase para nombres de metodos y variables.
  */
